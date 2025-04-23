@@ -1,44 +1,59 @@
-import React, { useEffect } from 'react';
-import { View, Text, Button, Alert } from 'react-native';
-import NfcManager, { NfcTech, Ndef } from 'react-native-nfc-manager';
-
-// Start NFC
-NfcManager.start();
+import React from 'react';
+import { View, Text, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/constants/Colors';
 
 export default function HomeScreen() {
-  useEffect(() => {
-    NfcManager.isSupported()
-      .then((supported) => {
-        if (!supported) {
-          Alert.alert('NFC not supported');
-        }
-      })
-      .catch(() => Alert.alert('Error checking NFC support'));
-  }, []);
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
 
-  async function readTag() {
-    try {
-      await NfcManager.requestTechnology(NfcTech.Ndef);
-      const tag = await NfcManager.getTag();
-      const payload = tag?.ndefMessage?.[0]?.payload;
-      if (payload) {
-        const text = Ndef.text.decodePayload(Uint8Array.from(payload));
-        Alert.alert('Tag Content', text);
-      } else {
-        Alert.alert('No NDEF data found');
+  const handleAddHabit = () => {
+    Alert.prompt(
+      'Add Habit',
+      'Name your habit',
+      (habitName) => {
+        if (habitName) {
+          console.log('New habit:', habitName);
+        }
       }
-    } catch (err) {
-      console.warn(err);
-      Alert.alert('Failed to read tag');
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-  }
+    );
+  };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 22, marginBottom: 20 }}>NFC Demo</Text>
-      <Button title="Scan NFC Tag" onPress={readTag} />
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <TouchableOpacity 
+        style={[styles.button, { backgroundColor: colors.tint }]}
+        onPress={handleAddHabit}
+      >
+        <Text style={[styles.buttonText, { color: colors.background }]}>Add Habit</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 32,
+  },
+  button: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+});

@@ -34,10 +34,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="nfc"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'NFC',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="wave.3.right" color={color} />,
         }}
       />
     </Tabs>
