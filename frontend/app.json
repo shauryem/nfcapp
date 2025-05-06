@@ -8,6 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.shaurye.frontend",
@@ -20,15 +21,14 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.NFC"
-      ]
+      "permissions": ["android.permission.NFC"]
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+
     "plugins": [
       "expo-router",
       [
@@ -40,14 +40,28 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "react-native-nfc-manager"
+      "react-native-nfc-manager",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "entitlements": {
+              "com.apple.developer.associated-domains": [
+                "applinks:f464-4-68-9-226.ngrok-free.app"
+              ]
+            }
+          }
+        }
+      ]
     ],
+
     "experiments": {
       "typedRoutes": true
     },
+
     "extra": {
       "router": {
-        "origin": false
+        "origin": "https://f464-4-68-9-226.ngrok-free.app"
       },
       "eas": {
         "projectId": "e96b40ed-b08c-4bb5-b8e5-6b5d19c9abaa"
